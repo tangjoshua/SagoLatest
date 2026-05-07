@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bd0e9e6e38f8f04d818e45b1e29792b, type: 3}
+  m_Name: DayData2
+  m_EditorClassIdentifier: Assembly-CSharp::DayData
+  npcPrefabs:
+  - {fileID: 3452020057165742652, guid: f4c6b0e660ca1f24997a72069681a6d9, type: 3}
+  - {fileID: 3452020057165742652, guid: 40a4cb7269bb6ee43b5ec016f528080c, type: 3}
+  - {fileID: 3452020057165742652, guid: 8fe7bcc7fe26f844f8c1ff7a7ab03995, type: 3}
+  dialogues:
+  - finally still remember how work it.
