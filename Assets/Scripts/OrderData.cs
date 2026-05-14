@@ -15,4 +15,9 @@ public class OrderData : ScriptableObject
 
     [TextArea]
     public string dialogue;
+
+    [Header("Complete Dialogue")]
+    [TextArea]
+    public List<string> completeDialogue = new List<string>();
+
 }

@@ -19,3 +19,5 @@ MonoBehaviour:
   minRefine: 1
   minShape: 1
   dialogue: Butter one please
+  completeDialogue:
+  - very surprise this tradisional still continue.

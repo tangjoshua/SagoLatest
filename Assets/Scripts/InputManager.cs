@@ -12,6 +12,7 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         HandleMouse();
+        HandleContinuousHold(); // ⭐ 新增：处理每帧持续按下的逻辑
     }
 
     void HandleMouse()
@@ -114,21 +115,37 @@ public class InputManager : MonoBehaviour
     // =========================
     void HandleHold(Vector2 pos)
     {
-        if (Camera.main == null) return;
+        // ⭐ Cooking 现在改成 Brush 系统
+        // 不再使用 Hold Cooking
 
-        Ray ray = Camera.main.ScreenPointToRay(pos);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit))
+        Debug.Log("Hold detected");
+    }
+    void HandleContinuousHold()
+    {
+        if (Input.GetMouseButton(0)) 
         {
-            Debug.Log("Hold: " + hit.collider.name);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-            CookingStation cook = hit.collider.GetComponentInParent<CookingStation>();
-
-            if (cook != null)
+            if (Physics.Raycast(ray, out hit))
             {
-                cook.StartCooking();
+                // 1️⃣ 检查是否在 RefineStation 上
+                RefineStation refine = hit.collider.GetComponentInParent<RefineStation>();
+                if (refine != null)
+                {
+                    refine.StartRefining(); // 持续触发加工
+                }
+
+                // 2️⃣ 如果以后 CookingStation 也想改回长按，也可以加在这里
+                // CookingStation cook = hit.collider.GetComponentInParent<CookingStation>();
+                // if (cook != null) cook.StartCooking(); 
             }
+        }
+        
+        // 当松开鼠标时，通知 Station 停止（隐藏进度条等）
+        if (Input.GetMouseButtonUp(0))
+        {
+             // 这里可以根据需要通知 Station，或者依靠 Station 内部 Update 的重置
         }
     }
 }

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class RefineStation : MonoBehaviour
@@ -7,135 +6,130 @@ public class RefineStation : MonoBehaviour
     public StationInput inputZone;
 
     [Header("Spawn Points")]
-    public Transform refineArea;   // ⭐ 星星生成区域
-    public Transform outputPoint;  // ⭐ 成品生成点
+    public Transform outputPoint;  
 
     [Header("Refine Settings")]
-    public GameObject refineTargetPrefab; // ⭐ 星星Prefab
-    public int targetCount = 5;           // 生成数量
+    public float refineTime = 3f;         
 
     [Header("Output")]
     public GameObject outputPrefab;
     public string outputTag = "Food";
-    [Header("Refine Area Size")]
-    public Vector2 areaSize = new Vector2(1.5f, 1.5f);
-
 
     private GameObject currentItem;
-    private List<GameObject> activeTargets = new List<GameObject>();
+    private bool isRefining = false;      
+    private float timer = 0f;             
 
     void OnEnable()
     {
         if (inputZone != null)
-            inputZone.OnItemReceived += StartRefine;
+            inputZone.OnItemReceived += SetItem; 
     }
 
     void OnDisable()
     {
         if (inputZone != null)
-            inputZone.OnItemReceived -= StartRefine;
+            inputZone.OnItemReceived -= SetItem;
     }
 
-    // ⭐ 放入物体
-    void StartRefine(GameObject item)
+    void SetItem(GameObject item)
     {
-        if (currentItem != null)
-        {
-            Debug.Log("正在加工中！");
-            return;
-        }
+        if (currentItem != null) return;
 
         currentItem = item;
+        timer = 0f;
+        isRefining = false;
 
-        Debug.Log("开始精修");
-
-        SpawnTargets();
+        if (ProgressUIManager.Instance != null) ProgressUIManager.Instance.Hide();
+        Debug.Log($"<color=cyan>[RefineStation]</color> 物品 {item.name} 已放入，等待加工。");
     }
 
-    // ⭐ 生成星星
-    void SpawnTargets()
+    // ⭐ 重要：长按时，InputManager 每一帧都应该调用这个函数
+    public void StartRefining()
     {
-        activeTargets.Clear();
-
-        for (int i = 0; i < targetCount; i++)
+        if (currentItem == null)
         {
-            Vector3 randomPos = refineArea.position + new Vector3(
-            Random.Range(-areaSize.x / 2, areaSize.x / 2),
-            0.2f,
-            Random.Range(-areaSize.y / 2, areaSize.y / 2)
-            );
+            Debug.LogWarning("<color=yellow>[RefineStation]</color> 尝试加工，但台上没有物品！");
+            return;
+        }
+        
+        if (!isRefining)
+        {
+            Debug.Log("<color=green>[RefineStation]</color> 检测到长按：加工开始");
+        }
+        
+        isRefining = true;
+    }
 
+    // ⭐ 重要：松开按键时，必须调用这个函数重置状态
+    public void StopRefining()
+    {
+        if (isRefining)
+        {
+            Debug.Log("<color=orange>[RefineStation]</color> 长按中断：加工停止");
+        }
+        isRefining = false;
+    }
 
-            GameObject target = Instantiate(refineTargetPrefab, randomPos, Quaternion.identity);
+    void Update()
+    {
+        if (isRefining && currentItem != null)
+        {
+            timer += Time.deltaTime;
 
-            // ⭐ 绑定回调
-            RefineTarget rt = target.GetComponent<RefineTarget>();
-            if (rt != null)
+            // 实时打印进度日志
+            Debug.Log($"<color=white>[RefineStation]</color> 加工中进度: {timer:F2} / {refineTime:F2}");
+
+            if (ProgressUIManager.Instance != null)
             {
-                rt.SetStation(this);
+                ProgressUIManager.Instance.UpdateProgress(timer, refineTime);
+            }
+            else
+            {
+                Debug.LogError("<color=red>[RefineStation]</color> 找不到 ProgressUIManager 实例！请确保场景中有此脚本。");
             }
 
-            activeTargets.Add(target);
+            if (timer >= refineTime)
+            {
+                CompleteRefine();
+            }
         }
+        
+        // 关键：为了防止状态锁死，如果一帧内没有调用 StartRefining，应该在逻辑上处理
+        // 这里我们依靠 InputManager 的每帧调用来维持 isRefining。
+        // 所以在 Update 的最后重置状态，确保只有按住时才为 true。
+        isRefining = false; 
     }
 
-    // ⭐ 每销毁一个调用
-    public void OnTargetDestroyed(GameObject target)
-    {
-        activeTargets.Remove(target);
-
-        if (activeTargets.Count == 0)
-        {
-            CompleteRefine();
-        }
-    }
-
-    // ⭐ 完成
     void CompleteRefine()
     {
-        Debug.Log("精修完成！");
+        Debug.Log("<color=gold>[RefineStation]</color> 加工完成！正在生成成品...");
 
         if (currentItem == null) return;
 
-        // ⭐ 1. 先拿旧数据
+        if (ProgressUIManager.Instance != null) ProgressUIManager.Instance.Hide();
+
         ItemData oldData = currentItem.GetComponent<ItemData>();
-
-        // ⭐ 2. 生成新物体
-        GameObject newItem = Instantiate(
-            outputPrefab,
-            outputPoint.position,
-            outputPoint.rotation
-        );
-
-        // ⭐ 3. 获取新数据
+        GameObject newItem = Instantiate(outputPrefab, outputPoint.position, outputPoint.rotation);
         ItemData newData = newItem.GetComponent<ItemData>();
 
-        // ⭐ 4. 数据继承
         if (oldData != null && newData != null)
         {
             newData.CopyFrom(oldData);
             newData.refineCount += 1;
         }
 
-        // ⭐ 5. 再删除旧物体
         Destroy(currentItem);
 
-        // ⭐ 6. 确保可拖拽
         if (newItem.GetComponent<DragItem>() == null)
             newItem.AddComponent<DragItem>();
 
-        // ⭐ 7. 设置 tag
         newItem.tag = outputTag;
 
-        // ⭐ 8. 解锁物理（如果之前锁过）
         Rigidbody rb = newItem.GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-        }
+        if (rb != null) rb.isKinematic = false;
 
-        // ⭐ 9. 清空状态
         currentItem = null;
+        timer = 0f;
+        isRefining = false;
     }
-
 }

@@ -15,6 +15,7 @@ public class DialogueUI : MonoBehaviour
     private int currentLine = 0;
 
     private bool isDialogueActive = false;
+    public System.Action OnDialogueEnd;
 
     void Awake()
     {
@@ -108,6 +109,8 @@ public class DialogueUI : MonoBehaviour
 
         Debug.Log("对白结束");
 
-        // ⭐ 关键：在这里开始NPC流程
+        // ⭐ 通知外部
+        OnDialogueEnd?.Invoke();
     }
+    
 }

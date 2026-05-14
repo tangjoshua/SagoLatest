@@ -13,6 +13,7 @@ public class DayManager : MonoBehaviour
 
     private int currentDayIndex = 0;
     private int currentNPCIndex = 0;
+    private bool waitingNextDay = false;
 
     void Awake()
     {
@@ -31,7 +32,10 @@ public class DayManager : MonoBehaviour
     {
         currentNPCIndex = 0;
 
-        Debug.Log("📅 Day " + (currentDayIndex + 1));
+        if (DayUI.Instance != null)
+        {
+            DayUI.Instance.UpdateDay(currentDayIndex + 1);
+        }
 
         ShowDayDialogue();
 
@@ -66,7 +70,10 @@ public class DayManager : MonoBehaviour
 
         if (currentNPCIndex >= day.npcPrefabs.Count)
         {
-            EndDay();
+            waitingNextDay = true;
+
+            DialogueUI.Instance.OnDialogueEnd += HandleDialogueEnd;
+
             return;
         }
 
@@ -80,9 +87,10 @@ public class DayManager : MonoBehaviour
     // =========================
     // ⭐ 一天结束
     // =========================
-    void EndDay()
+
+    void NextDay()
     {
-        Debug.Log("🌙 Day Complete");
+        Debug.Log("➡ 进入下一天");
 
         currentDayIndex++;
 
@@ -107,5 +115,17 @@ public class DayManager : MonoBehaviour
                 "Game End"
             }
         );
+    }
+
+    void HandleDialogueEnd()
+    {
+        DialogueUI.Instance.OnDialogueEnd -= HandleDialogueEnd;
+
+        if (waitingNextDay)
+        {
+            waitingNextDay = false;
+
+            NextDay();
+        }
     }
 }

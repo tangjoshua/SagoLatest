@@ -13,6 +13,12 @@ public class CameraController : MonoBehaviour
     private Transform targetPoint;
     private bool isMoving = false;
 
+    [Header("Shape UI")]
+    public GameObject shapeUI;
+
+    [Header("Shape Camera Index")]
+    public int shapeCameraIndex = 2;
+
     void Update()
     {
         if (targetPoint == null) return;
@@ -59,6 +65,23 @@ public class CameraController : MonoBehaviour
         isMoving = true;
 
         Debug.Log("Switching to: " + targetPoint.name);
+
+        // =========================
+        // ⭐ Shape UI 控制
+        // =========================
+
+        if (shapeUI != null)
+        {
+            // 到Shape镜头
+            if (index == shapeCameraIndex)
+            {
+                shapeUI.SetActive(true);
+            }
+            else
+            {
+                shapeUI.SetActive(false);
+            }
+        }
     }
 
     public bool IsMoving()

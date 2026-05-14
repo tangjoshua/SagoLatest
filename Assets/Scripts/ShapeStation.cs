@@ -1,16 +1,22 @@
 using UnityEngine;
+using UnityEngine.UI; // 必须引用
+using TMPro;           // 必须引用
 
 public class ShapeStation : MonoBehaviour
 {
+    [Header("UI References")]
+    public Slider interactionSlider;      // ⭐ 你在 shapeUI 里的那个左右滑动条
+    public TextMeshProUGUI warningText;   // ⭐ 提示“加入面粉”的文字
+
     [Header("Settings")]
     public float requiredProgress = 5f;
-    public float progressPerSwipe = 0.5f;
-    public float swipeThreshold = 50f;
+    public float progressPerMove = 0.2f;  // 每次滑动条变动增加的进度
 
     [Header("Dough Stickiness")]
     public float initialStickiness = 10f;
     public float stickinessDecreasePerFlour = 2f;
     public float requiredStickinessForCompletion = 2f;
+    public float stickinessThreshold = 8f; // ⭐ 粘稠度超过这个值就停止加工
 
     [Header("Prefab")]
     public GameObject outputPrefab;
@@ -23,17 +29,19 @@ public class ShapeStation : MonoBehaviour
     private float currentProgress = 0f;
     private float currentStickiness;
     private GameObject currentDough;
+    private float lastSliderValue; // 用于记录滑动条上一次的位置
 
-    private Vector2 touchStartPos;
-    private bool isSwiping = false;
-
-   void OnEnable()
+    void OnEnable()
     {
         if (doughInputZone != null)
             doughInputZone.OnItemReceived += SetDough;
 
         if (flourInputZone != null)
             flourInputZone.OnItemReceived += AddFlour;
+
+        // 绑定 Slider 事件
+        if (interactionSlider != null)
+            interactionSlider.onValueChanged.AddListener(OnSliderMoved);
     }
 
     void OnDisable()
@@ -43,78 +51,70 @@ public class ShapeStation : MonoBehaviour
 
         if (flourInputZone != null)
             flourInputZone.OnItemReceived -= AddFlour;
-    }
 
+        if (interactionSlider != null)
+            interactionSlider.onValueChanged.RemoveListener(OnSliderMoved);
+    }
 
     void Start()
     {
         currentStickiness = initialStickiness;
+        if (warningText != null) warningText.gameObject.SetActive(false);
     }
-
-    // ⭐ 统一入口（核心）
-
 
     public void SetDough(GameObject dough)
     {
-        if (currentDough != null)
-        {
-            Debug.LogWarning("已有面团！");
-            return;
-        }
+        if (currentDough != null) return;
 
         currentDough = dough;
         currentProgress = 0f;
         currentStickiness = initialStickiness;
+        
+        // 重置进度条 UI
+        if (ProgressUIManager.Instance != null)
+        {
+            ProgressUIManager.Instance.UpdateProgress(0, requiredProgress);
+        }
 
-        Debug.Log("面团已就位");
+        Debug.Log("面团已就位，请左右滑动 Slider 加工");
     }
 
-    public void ProcessInput()
+    // ⭐ Slider 左右移动时触发
+    void OnSliderMoved(float value)
     {
-        if (currentDough == null)
+        if (currentDough == null) return;
+
+        // 1. 检查粘稠度
+        if (currentStickiness > stickinessThreshold)
         {
-            Debug.Log("工作台是空的，请放入面团。");
+            if (warningText != null)
+            {
+                warningText.text = "too sticky! Add flour to continue.";
+                warningText.gameObject.SetActive(true);
+            }
+            return; // 粘稠度太高，停止加工逻辑
         }
         else
         {
-            Debug.Log($"进度: {currentProgress}, 粘稠度: {currentStickiness}");
-        }
-    }
-
-    void Update()
-    {
-        if (currentDough != null)
-        {
-            HandleSwipeInput();
-        }
-    }
-
-    void HandleSwipeInput()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            touchStartPos = Input.mousePosition;
-            isSwiping = true;
+            if (warningText != null) warningText.gameObject.SetActive(false);
         }
 
-        if (Input.GetMouseButtonUp(0))
+        // 2. 计算滑动增量（只要在动就加进度）
+        float delta = Mathf.Abs(value - lastSliderValue);
+        if (delta > 0.01f) // 只有显著移动才算
         {
-            isSwiping = false;
-        }
+            currentProgress += progressPerMove;
+            lastSliderValue = value;
 
-        if (isSwiping && Input.GetMouseButton(0))
-        {
-            Vector2 currentPos = Input.mousePosition;
-            float distance = Vector2.Distance(touchStartPos, currentPos);
-
-            if (distance > swipeThreshold)
+            // 3. 更新进度条 UI
+            if (ProgressUIManager.Instance != null)
             {
-                currentProgress += progressPerSwipe;
-                Debug.Log($"加工中: {currentProgress}/{requiredProgress}");
-
-                touchStartPos = currentPos;
+                ProgressUIManager.Instance.UpdateProgress(currentProgress, requiredProgress);
             }
 
+            Debug.Log($"加工进度: {currentProgress}/{requiredProgress}");
+
+            // 4. 完成检查
             if (currentProgress >= requiredProgress)
             {
                 if (currentStickiness <= requiredStickinessForCompletion)
@@ -123,7 +123,11 @@ public class ShapeStation : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("太粘了！需要加面粉");
+                    if (warningText != null)
+                    {
+                        warningText.text = "Last step: Stickiness needs to drop to " + requiredStickinessForCompletion;
+                        warningText.gameObject.SetActive(true);
+                    }
                 }
             }
         }
@@ -133,28 +137,29 @@ public class ShapeStation : MonoBehaviour
     {
         if (currentDough == null)
         {
-            Debug.Log("没面团，加面粉无效");
             Destroy(flour);
             return;
         }
 
         currentStickiness = Mathf.Max(0f, currentStickiness - stickinessDecreasePerFlour);
+        Debug.Log("加入面粉，当前粘稠度: " + currentStickiness);
 
-        Debug.Log("粘稠度下降: " + currentStickiness);
+        // 如果粘稠度降下来了，关闭警告
+        if (currentStickiness <= stickinessThreshold && warningText != null)
+        {
+            warningText.gameObject.SetActive(false);
+        }
 
         Destroy(flour);
     }
 
-
     void CompleteShape()
     {
-        GameObject newItem = Instantiate(
-            outputPrefab,
-            spawnPoint.position,
-            spawnPoint.rotation
-        );
+        Debug.Log("面团造型完成！");
+        if (ProgressUIManager.Instance != null) ProgressUIManager.Instance.Hide();
 
-        // ⭐ 继承数据
+        GameObject newItem = Instantiate(outputPrefab, spawnPoint.position, spawnPoint.rotation);
+
         ItemData oldData = currentDough.GetComponent<ItemData>();
         ItemData newData = newItem.GetComponent<ItemData>();
 
@@ -165,12 +170,12 @@ public class ShapeStation : MonoBehaviour
         }
 
         Destroy(currentDough);
-
         currentDough = null;
     }
 
-    public bool HasDough()
+    // 原有的 ProcessInput 保留，可以用来调试
+    public void ProcessInput()
     {
-        return currentDough != null;
+        Debug.Log($"进度: {currentProgress}, 粘稠度: {currentStickiness}");
     }
 }

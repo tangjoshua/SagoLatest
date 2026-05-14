@@ -96,13 +96,12 @@ public class NPCOrder : MonoBehaviour
         Debug.Log("🎉 NPC订单完成");
 
         // ⭐ NPC完成后的文本
-        DialogueUI.Instance.StartDialogue(
-            new System.Collections.Generic.List<string>()
-            {
-                "Thank you for the food!",
-                "It's delicious!"
-            }
-        );
+        if (orderData != null &&
+        orderData.completeDialogue != null &&
+        orderData.completeDialogue.Count > 0)
+        {
+            DialogueUI.Instance.StartDialogue(orderData.completeDialogue);
+        }
 
         // ⭐ 通知DayManager
         DayManager.Instance.SpawnNextNPC();
