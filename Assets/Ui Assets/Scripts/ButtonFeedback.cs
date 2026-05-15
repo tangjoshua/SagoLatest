@@ -16,6 +16,7 @@ public class ButtonFeedback : MonoBehaviour,
     public AudioSource audioSource;
 
     public string sceneToLoad = "GameScene";
+    public bool loadScene = true;
 
     private Vector3 originalScale;
 
@@ -60,6 +61,9 @@ public class ButtonFeedback : MonoBehaviour,
         yield return new WaitForSeconds(clickDelay);
 
         // 切换场景
-        SceneManager.LoadScene(sceneToLoad);
+        if (loadScene && !string.IsNullOrEmpty(sceneToLoad))
+        {
+            SceneManager.LoadScene(sceneToLoad);
+        }
     }
 }

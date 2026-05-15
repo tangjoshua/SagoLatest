@@ -2,13 +2,15 @@
 
 public class BGMController : MonoBehaviour
 {
-    public static AudioSource currentBGM;
+    private AudioSource audioSource;
 
     void Awake()
     {
-        currentBGM = GetComponent<AudioSource>();
+        audioSource = GetComponent<AudioSource>();
+    }
 
-        currentBGM.volume =
-            PlayerPrefs.GetFloat("BGMVolume", 1f);
+    void Update()
+    {
+        audioSource.volume = PlayerPrefs.GetFloat("BGMVolume", 1f);
     }
 }
