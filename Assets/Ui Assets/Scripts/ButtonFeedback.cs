@@ -26,6 +26,8 @@ public class ButtonFeedback : MonoBehaviour,
     void Start()
     {
         originalScale = transform.localScale;
+
+        SFXManager.RegisterSFX(audioSource);
     }
 
     public void OnPointerDown(PointerEventData eventData)
