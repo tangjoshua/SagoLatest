@@ -608,7 +608,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: 820d2d71bc4103f46a1153f8641324ef, type: 3}
+  m_Resource: {fileID: 8300000, guid: 73fb660320995f84aa223bcf31063fda, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
@@ -922,6 +922,7 @@ MonoBehaviour:
   pressedSprite: {fileID: 21300000, guid: 0138d5b03e9d4da40bcfc0d0fab9d2b5, type: 3}
   audioSource: {fileID: 1037342802}
   sceneToLoad: MainMenu
+  loadScene: 1
   clickDelay: 0.6
 --- !u!82 &1037342802
 AudioSource:
