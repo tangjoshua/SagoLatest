@@ -1,0 +1,110 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &6005041914397036
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1.6969423
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.92575645
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.9710787
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.36592093
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.93064594
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 222.929
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 4950c9d620782224da09f6cd7fcf580e, type: 2}
+    - target: {fileID: 919132149155446097, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      propertyPath: m_Name
+      value: ChickenCab
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5540583040916161695}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2878487459405642157}
+  m_SourcePrefab: {fileID: 100100000, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+--- !u!1 &924430189925399613 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 804d3121f0fe45c45b5b05eb1050e60c, type: 3}
+  m_PrefabInstance: {fileID: 6005041914397036}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &5540583040916161695
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924430189925399613}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 8.720142
+  m_Height: 23.199997
+  m_Direction: 1
+  m_Center: {x: -1.4210855e-14, y: 11.599998, z: -0.00000047683716}
+--- !u!114 &2878487459405642157
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 924430189925399613}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcc2c3e87b8b40449a90c282d42cc384, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ingredient
+  ingredientName: Chicken
