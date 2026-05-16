@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 3914347525648740806}
   - component: {fileID: 895327601191275395}
   - component: {fileID: 619764621259652791}
-  - component: {fileID: 4950165915019876714}
   - component: {fileID: 8510399260477421563}
   - component: {fileID: 4742184315439911960}
   - component: {fileID: 5724941585564894109}
+  - component: {fileID: 7690887619389882507}
   m_Layer: 3
   m_Name: Sago
   m_TagString: Sago
@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.7906, y: 0.363, z: -3.72938}
-  m_LocalScale: {x: 0.10905, y: 0.10905, z: 0.10905}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -44,7 +44,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5793805911993803879}
-  m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: -4080794267883544740, guid: b14b5f7d3e668f34ba7e287afce98fc3, type: 3}
 --- !u!23 &619764621259652791
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -94,29 +94,6 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &4950165915019876714
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5793805911993803879}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5000001
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
 --- !u!54 &8510399260477421563
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -174,3 +151,24 @@ MonoBehaviour:
   cookTime: 0
   refineCount: 0
   shapeProgress: 0
+--- !u!65 &7690887619389882507
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5793805911993803879}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.24468677, y: 0.19296874, z: 0.06903576}
+  m_Center: {x: -0.0052216793, y: -0.011475637, z: -0.019064134}
