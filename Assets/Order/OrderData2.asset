@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrderData
   requiredTag: Dough
   requiredIngredients:
-  - Sweet
+  - Sugar
   minCookTime: 10
   minRefine: 1
   minShape: 1

@@ -30,13 +30,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4795267480256730961}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.013756532, y: 0.46655, z: 0.29851}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!33 &6243442901093841511
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -156,6 +156,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::OrderPaper
   orderData: {fileID: 11400000, guid: b4bdfe45ab802f741b89a21b5d1d25fb, type: 2}
   npcPrefab: {fileID: 3452020057165742652, guid: 40a4cb7269bb6ee43b5ec016f528080c, type: 3}
+  currentSlot: {fileID: 0}
 --- !u!114 &2493998217916382519
 MonoBehaviour:
   m_ObjectHideFlags: 0

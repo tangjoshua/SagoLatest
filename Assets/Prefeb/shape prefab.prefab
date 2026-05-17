@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8977318335561918557}
   m_Layer: 3
   m_Name: shape prefab
-  m_TagString: Food
+  m_TagString: Dough
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -167,7 +167,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ItemData
   itemName: shape prefab
-  itemTag: Food
+  itemTag: Dough
   ingredients: []
   cookTime: 0
   refineCount: 0
